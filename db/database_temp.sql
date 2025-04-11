@@ -1,4 +1,3 @@
-create database ai;
 
 CREATE TABLE `users` (
   `ID` int NOT NULL AUTO_INCREMENT,
@@ -14,6 +13,8 @@ CREATE TABLE `users` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
+CREATE INDEX idx_user_id ON records(user_id);
+
 CREATE TABLE `records` (
   `ID` int NOT NULL AUTO_INCREMENT,
   `user_id` bigint DEFAULT NULL,
@@ -24,6 +25,8 @@ CREATE TABLE `records` (
   `reset_at` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
+create index idx_user_id on users (user_id);
 
 create table image_requests
 (

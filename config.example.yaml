@@ -1,11 +1,30 @@
 BOT:
-  TOKEN: 55***88  # Get your bot token from @BotFater
+  TOKEN:7840695901:AAHiKI87mIOeFlBptzFxGz3H0oozHyAkRE0 # Get your bot token from @BotFater
+# AI Provider Configuration
+# Choose ONE type: "openai", "azure", or "openrouter"
 AI:
-  VERSION: "2023-03-15-preview"
-  TYPE: "azure"
-  MODEL: "your azure openai deployment name"
-  BASE: "https://docs-test-001.openai.azure.com/"
-  TOKEN: "be***b63f"
+  TYPE: "openrouter" # <--- CHANGE THIS to "openai", "azure", or "openrouter"
+
+  # --- OpenAI Configuration --- (if TYPE is "openai")
+  # TOKEN: "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" # Your OpenAI API Key
+
+  # --- Azure OpenAI Configuration --- (if TYPE is "azure")
+  # VERSION: "2023-03-15-preview" # Azure API Version
+  # MODEL: "your-azure-deployment-name" # Azure Deployment Name (used for chat)
+  # BASE: "https://your-resource-name.openai.azure.com/" # Your Azure Endpoint
+  # TOKEN: "your-azure-api-key" # Your Azure API Key
+  # IMAGE_MODEL: "dalle3" # Optional: Azure Deployment Name for DALL-E 3 if available
+
+  # --- OpenRouter Configuration --- (if TYPE is "openrouter")
+  BASE: "https://openrouter.ai/api/v1" # OpenRouter API Endpoint
+  TOKEN: "sk-or-..." # Your OpenRouter API Key
+  MODEL: "openai/gpt-3.5-turbo" # <--- Default to OpenAI's model via OpenRouter (can be changed to other supported models)
+  IMAGE_MODEL: "openai/dall-e-3" # Optional: Model identifier for image generation via OpenRouter (e.g., stabilityai/stable-diffusion-xl-1024-v1-0) - Check OpenRouter docs for availability
+
+# Optional: Required by OpenRouter for identification (replace with your actual info)
+# APP_URL: "https://your-app-url.com"
+# APP_NAME: "Your-App-Name"
+
 MYSQL:
   DBHOST: 127.0.0.1
   DBPORT: 3306

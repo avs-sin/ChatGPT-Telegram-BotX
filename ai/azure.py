@@ -10,7 +10,10 @@ class AzureAIClient:
             'azure_endpoint': config["AI"]["BASE"],
             'api_version': config["AI"]["VERSION"]
         }
-
+        # Ensure the model is configured for Azure
+        if "MODEL" not in config.get("AI", {}):
+             raise ValueError("AI configuration in config.yaml is missing required key: MODEL (for Azure)")
+        self.model = config["AI"]["MODEL"] # Add model attribute
         self.client = AzureOpenAI(**self.open_ai_config)
 
     def generate_image(self, prompt) -> str:
@@ -23,7 +26,10 @@ class AzureAIClient:
         )
 
         image_url = response.data[0].url
-        return image_url
+        if image_url:
+            return image_url
+        else:
+            raise ValueError("Azure image generation response did not contain a valid URL.")
 
     def chat_completions(self, messages: list):
         answer = ""

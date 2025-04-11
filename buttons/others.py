@@ -6,7 +6,8 @@ from telegram import (
 import time
 import json
 import html
-import openai
+# import openai - No longer needed directly for API calls here
+from openai import BadRequestError, APITimeoutError # Import specific errors potentially raised
 import asyncio
 import traceback
 from typing import Dict
@@ -79,11 +80,15 @@ async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> N
 
     # Finally, send the message
     error_reply = ""
-    if type(context.error) in (openai.ErrorObject.error.InvalidRequestError, openai.BadRequestError):
-        error_reply = "The response was filtered due to the prompt triggering OpenAI’s content management " \
-                      "policy. Please modify your prompt and retry. To learn more about our content filtering. "
-    elif type(context.error) in [openai.ErrorObject.error.Timeout, asyncio.exceptions.TimeoutError]:
-        error_reply = "Time out. Retry please!"
+    # Check for errors potentially raised by the openai library (used by OpenRouter client)
+    # Note: OpenRouter might have its own content filtering policies, adjust message if needed.
+    if isinstance(context.error, BadRequestError):
+         # This could be due to various issues: invalid model, bad request format, potentially content filtering by OpenRouter.
+         # The message might need refinement based on OpenRouter's specific error details if available.
+        error_reply = f"API Request Error: {context.error}. This might be due to an invalid request, model issue, or content policy. Please check your input or configuration."
+    elif isinstance(context.error, APITimeoutError) or isinstance(context.error, asyncio.TimeoutError):
+        error_reply = "API request timed out. Please try again later."
+    # Add other specific error checks if needed (e.g., AuthenticationError, RateLimitError from openai library)
 
     if error_reply:
         await update.message.reply_text(error_reply, parse_mode="Markdown", disable_web_page_preview=True)
